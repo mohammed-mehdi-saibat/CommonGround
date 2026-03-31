@@ -6,23 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Bed extends Model
+class Booking extends Model
 {
     protected $fillable = [
-        'dorm_id',
-        'bed_number',
-        'is_functional',
-        'notes'
+        'user_id',
+        'reference_number',
+        'status',
+        'total_amount',
+        'notes',
+        'booking_date'
     ];
 
     protected $casts = [
-        'is_functional' => 'boolean',
-        'dorm_id' => 'integer'
+        'total_amount' => 'decimal:2',
+        'booking_date' => 'datetime'
     ];
 
-    public function dorm(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Dorm::class);
+        return $this->belongsTo(User::class);
     }
 
     public function bookingItems(): HasMany
