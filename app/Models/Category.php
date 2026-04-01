@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
-use function PHPSTORM_META\map;
 
 class Category extends Model
 {
@@ -36,5 +36,12 @@ class Category extends Model
     public function dorms(): HasMany
     {
         return $this->hasMany(Dorm::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (Category $category) {
+            $category->slug = Str::slug($category->name);
+        });
     }
 }
