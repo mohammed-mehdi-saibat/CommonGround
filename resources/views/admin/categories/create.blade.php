@@ -1,1 +1,2 @@
-<h2>Create a category</h2>
+<h1>Admin</h1>
+<small>Create Category</small>
