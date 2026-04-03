@@ -26,7 +26,7 @@ class StoreBedRequest extends FormRequest
     {
         return [
             'dorm_id' => ['required', 'integer', 'exists:dorms,id'],
-            'bed_number' => ['required', 'string', Rule::unique('dorms')->where(
+            'bed_number' => ['required', 'string', Rule::unique('beds')->where(
                 fn($query) => $query->where('dorm_id', $this->dorm_id)
             )],
             'is_functional' => ['boolean'],

@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UpdateBedRequest extends FormRequest
 {
@@ -12,7 +14,7 @@ class UpdateBedRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check() && Auth::user()->role === 'admin';
     }
 
     /**
@@ -23,7 +25,10 @@ class UpdateBedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'dorm_id' => ['required', 'integer', 'exists:dorms,id'],
+            'bed_number' => ['required', 'string', Rule::unique('beds')->where(fn($query) => $query->where('dorm_id', $this->dorm_id))->ignore($this->bed->id)],
+            'is_functional' => ['boolean'],
+            'notes' => ['nullable', 'string', 'max:1000']
         ];
     }
 }

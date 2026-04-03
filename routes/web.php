@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BedController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
@@ -26,4 +27,5 @@ require __DIR__ . '/auth.php';
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('dorms', DormController::class);
+    Route::resource('beds', BedController::class);
 });
