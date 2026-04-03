@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DormController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,4 +25,5 @@ require __DIR__ . '/auth.php';
 // Admin Routes
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('categories', CategoryController::class);
+    Route::resource('dorms', DormController::class);
 });

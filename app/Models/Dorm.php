@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 use function PHPSTORM_META\map;
 
@@ -35,5 +36,21 @@ class Dorm extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (Dorm $dorm) {
+            $baseSlug = Str::slug($dorm->name . '-' . $dorm->category_id);
+            $slug = $baseSlug;
+            $counter = 1;
+
+            while (Dorm::where('slug', $slug)->exists()) {
+                $slug = $baseSlug . '_' . $counter;
+                $counter++;
+            }
+
+            $dorm->slug = $slug;
+        });
     }
 }

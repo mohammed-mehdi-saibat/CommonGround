@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreDormRequest;
+use App\Http\Requests\UpdateDormRequest;
 use App\Models\Dorm;
 use Illuminate\Http\Request;
 
@@ -12,7 +14,9 @@ class DormController extends Controller
      */
     public function index()
     {
-        //
+        $dorms = Dorm::with('category')->latest()->paginate(10);
+
+        return view('admin.dorms.index', compact('dorms'));
     }
 
     /**
@@ -20,15 +24,17 @@ class DormController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.dorms.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreDormRequest $request)
     {
-        //
+        Dorm::create($request->validated());
+
+        return redirect()->route('admin.dorms.index')->with('success', 'Dorm created successfully!');
     }
 
     /**
@@ -36,7 +42,7 @@ class DormController extends Controller
      */
     public function show(Dorm $dorm)
     {
-        //
+        return view('admin.dorms.show', compact('dorm'));
     }
 
     /**
@@ -44,15 +50,17 @@ class DormController extends Controller
      */
     public function edit(Dorm $dorm)
     {
-        //
+        return view('admin.dorms.edit', compact('dorm'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Dorm $dorm)
+    public function update(UpdateDormRequest $request, Dorm $dorm)
     {
-        //
+        $dorm->update($request->validated());
+
+        return redirect()->route('admin.dorms.index')->with('success', 'Dorm updated successfully!');
     }
 
     /**
@@ -60,6 +68,8 @@ class DormController extends Controller
      */
     public function destroy(Dorm $dorm)
     {
-        //
+        $dorm->delete();
+
+        return redirect()->route('admin.dorms.index')->with('success', 'Dorm deleted successfully!');
     }
 }

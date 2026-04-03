@@ -5,8 +5,9 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
-class StoreCategoryRequest extends FormRequest
+class StoreDormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,16 +25,15 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:categories'],
+            'name' => ['required', 'string', 'max:255', Rule::unique('dorms')->where(
+                fn($query) =>
+                $query->where('category_id', $this->category_id)
+            ),],
+            'total_beds' => ['required', 'integer', 'min:1'],
+            'floor_number' => ['required', 'integer'],
+            'is_active' => ['boolean'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'currency' => ['required', 'string', 'size:3'],
-            'base_price' => ['required', 'numeric', 'min:0'],
-            'gender_type' => ['required', 'string', 'in:mixed,female_only,male_only'],
-            'is_ensuite' => ['boolean'],
-            'has_ac' => ['boolean'],
-            'has_lockers' => ['boolean'],
-            'has_individual_plugs' => ['boolean'],
-            'has_curtains' => ['boolean'],
+            'category_id' => ['required', 'exists:categories,id'],
         ];
     }
 }
