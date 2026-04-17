@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DormController;
+use App\Http\Controllers\GuestController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,4 +29,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('categories', CategoryController::class);
     Route::resource('dorms', DormController::class);
     Route::resource('beds', BedController::class);
+});
+
+// Guest Routes
+Route::middleware(['auth', 'role:guest'])->prefix('guest')->name('guest.')->group(function () {
+    Route::get('/profile/edit', [GuestController::class, 'edit'])->name('edit');
+    Route::patch('/profile/update', [GuestController::class, 'update'])->name('update');
 });

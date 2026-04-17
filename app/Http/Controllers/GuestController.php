@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateGuestRequest;
 use App\Models\Guest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GuestController extends Controller
 {
@@ -36,7 +38,7 @@ class GuestController extends Controller
      */
     public function show(Guest $guest)
     {
-        //
+        return view('guest.show', compact('guest'));
     }
 
     /**
@@ -44,15 +46,18 @@ class GuestController extends Controller
      */
     public function edit(Guest $guest)
     {
-        //
+        $guest = Auth::user()->guest;
+        return view('guest.edit', compact('guest'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Guest $guest)
+    public function update(UpdateGuestRequest $request, Guest $guest)
     {
-        //
+        Auth::user()->guest->update($request->validated());
+
+        return redirect()->route('guest.edit')->with('success', 'Profile updated successfully!');
     }
 
     /**
