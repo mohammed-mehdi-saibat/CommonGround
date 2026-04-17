@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('guests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // A guest cannot exist witouth a user
+            $table->string('cin')->nullable()->unique; // nullable for foreigners
             $table->string('passport_number')->nullable(); // nullable for locals
             $table->string('nationality');
             $table->timestamps();

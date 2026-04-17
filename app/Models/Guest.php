@@ -9,6 +9,7 @@ class Guest extends Model
 {
     protected $fillable = [
         'user_id',
+        'cin',
         'passport_number',
         'nationality'
     ];
