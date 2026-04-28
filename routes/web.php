@@ -25,7 +25,7 @@ require __DIR__ . '/auth.php';
 
 
 // Admin Routes
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('dorms', DormController::class);
     Route::resource('beds', BedController::class);
