@@ -7,6 +7,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DormController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\StaffController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +30,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('categories', CategoryController::class);
     Route::resource('dorms', DormController::class);
     Route::resource('beds', BedController::class);
+    Route::resource('staff', StaffController::class);
 });
 
 // Guest Routes

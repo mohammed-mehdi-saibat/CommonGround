@@ -18,6 +18,12 @@ class UserObserver
                 'nationality' => 'Unknown'
             ]);
         }
+
+        if ($user->role === 'staff') {
+            $user->staff()->create([
+                'hired_at' => now(),
+            ]);
+        }
     }
 
     /**

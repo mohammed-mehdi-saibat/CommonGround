@@ -31,8 +31,14 @@ class User extends Authenticatable
         ];
     }
 
+
     public function guest(): HasOne
     {
         return $this->hasOne(Guest::class);
+    }
+
+    public function staff(): HasOne
+    {
+        return $this->hasOne(Staff::class);
     }
 }
