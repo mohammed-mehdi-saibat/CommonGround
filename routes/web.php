@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\GuestController as AdminGuestController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 
 
 Route::get('/', function () {
@@ -37,6 +38,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('staff', AdminStaffController::class);
     Route::resource('guests', AdminGuestController::class)->only(['index', 'show', 'destroy']);
     Route::resource('bookings', AdminBookingController::class)->only(['index', 'show', 'update', 'destroy']);
+    Route::patch('users/{user}/ban', [AdminUserController::class, 'ban'])->name('users.ban');
+    Route::patch('users/{user}/unban', [AdminUserController::class, 'unban'])->name('users.unban');
 });
 
 // Guest Routes
