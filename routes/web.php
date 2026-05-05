@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DormController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\Admin\GuestController as AdminGuestController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 
@@ -32,6 +33,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('dorms', DormController::class);
     Route::resource('beds', BedController::class);
     Route::resource('staff', AdminStaffController::class);
+});
+
+// Admin Guest Routes
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('guests', AdminGuestController::class)->only(['index', 'show', 'destroy']);
 });
 
 // Guest Routes
