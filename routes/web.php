@@ -13,11 +13,14 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\PaymentController;
 
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/stripe/webhook', [PaymentController::class, 'webhook'])->name('stripe.webhook');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -48,6 +51,8 @@ Route::middleware(['auth', 'role:guest'])->prefix('guest')->name('guest.')->grou
     Route::patch('/profile/{guest}', [GuestController::class, 'update'])->name('update');
     Route::get('/view/{guest}', [GuestController::class, 'show'])->name('show');
     Route::resource('bookings', BookingController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
+    Route::get('bookings/{booking}/checkout', [PaymentController::class, 'checkout'])->name('bookings.payment.checkout');
+    Route::get('bookings/{booking}/success', [PaymentController::class, 'success'])->name('bookings.payment.success');
 });
 
 // Staff Routes
