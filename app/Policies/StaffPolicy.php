@@ -14,7 +14,7 @@ class StaffPolicy
 
     public function view(User $user, Staff $staff): bool
     {
-        return false;
+        return $user->role === 'admin' || $user->id === $staff->user_id;
     }
 
     public function create(User $user): bool

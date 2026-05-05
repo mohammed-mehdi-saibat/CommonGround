@@ -2,64 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateStaffRequest;
 use App\Models\Staff;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class StaffController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+    use AuthorizesRequests;
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Staff $staff)
     {
-        //
+        $this->authorize('view', $staff);
+
+        return view('staff.show', compact('staff'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Staff $staff)
     {
-        //
+        $this->authorize('update', $staff);
+
+        $user = Auth::user();
+
+        return view('staff.edit', compact('staff', 'user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Staff $staff)
+    public function update(UpdateStaffRequest $request, Staff $staff)
     {
-        //
-    }
+        $this->authorize('update', $staff);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Staff $staff)
-    {
-        //
+        $staff->update($request->validated());
+
+        return redirect()->back()->with('success', 'Profile updated successfully!');
     }
 }
