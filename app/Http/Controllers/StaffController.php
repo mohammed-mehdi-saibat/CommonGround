@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateStaffRequest;
 use App\Models\Staff;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class StaffController extends Controller
 {
-    use AuthorizesRequests;
-
     public function show(Staff $staff)
     {
         $this->authorize('view', $staff);

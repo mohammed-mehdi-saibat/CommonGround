@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateGuestRequest;
 use App\Models\Guest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class GuestController extends Controller
 {
-    use AuthorizesRequests;
-
     public function show(Guest $guest)
     {
         $this->authorize('update', $guest);

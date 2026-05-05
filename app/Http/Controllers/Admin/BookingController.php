@@ -5,12 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateBookingStatusRequest;
 use App\Models\Booking;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class BookingController extends Controller
 {
-    use AuthorizesRequests;
-
     public function index()
     {
         $bookings = Booking::with('user')->latest()->paginate(10);

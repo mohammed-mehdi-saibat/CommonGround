@@ -8,12 +8,9 @@ use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class BookingController extends Controller
 {
-    use AuthorizesRequests;
-
     public function create()
     {
         $beds = Bed::with('dorm.category')->where('is_functional', true)->get();
