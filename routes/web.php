@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BedController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\GuestController;
 use App\Http\Controllers\Admin\GuestController as AdminGuestController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 
 
 Route::get('/', function () {
@@ -34,6 +36,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('beds', BedController::class);
     Route::resource('staff', AdminStaffController::class);
     Route::resource('guests', AdminGuestController::class)->only(['index', 'show', 'destroy']);
+    Route::resource('bookings', AdminBookingController::class)->only(['index', 'show', 'update', 'destroy']);
 });
 
 // Guest Routes
@@ -41,6 +44,7 @@ Route::middleware(['auth', 'role:guest'])->prefix('guest')->name('guest.')->grou
     Route::get('/profile/{guest}', [GuestController::class, 'edit'])->name('edit');
     Route::patch('/profile/{guest}', [GuestController::class, 'update'])->name('update');
     Route::get('/view/{guest}', [GuestController::class, 'show'])->name('show');
+    Route::resource('bookings', BookingController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
 });
 
 // Staff Routes
