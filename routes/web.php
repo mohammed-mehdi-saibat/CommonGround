@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DormController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 
 
 Route::get('/', function () {
@@ -30,11 +31,18 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('categories', CategoryController::class);
     Route::resource('dorms', DormController::class);
     Route::resource('beds', BedController::class);
-    Route::resource('staff', StaffController::class);
+    Route::resource('staff', AdminStaffController::class);
 });
 
 // Guest Routes
 Route::middleware(['auth', 'role:guest'])->prefix('guest')->name('guest.')->group(function () {
-    Route::get('/profile/edit', [GuestController::class, 'edit'])->name('edit');
-    Route::patch('/profile/update', [GuestController::class, 'update'])->name('update');
+    Route::get('/profile/{guest}', [GuestController::class, 'edit'])->name('edit');
+    Route::patch('/profile/{guest}', [GuestController::class, 'update'])->name('update');
+    Route::get('/view/{guest}', [GuestController::class, 'show'])->name('show');
+});
+
+// Staff Routes
+Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->group(function () {
+    Route::get('/profile/{staff}', [StaffController::class, 'edit'])->name('edit');
+    Route::patch('/profile/{staff}', [StaffController::class, 'update'])->name('update');
 });
