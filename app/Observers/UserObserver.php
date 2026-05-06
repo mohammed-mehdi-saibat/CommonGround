@@ -26,19 +26,11 @@ class UserObserver
         }
     }
 
-    public function updated(User $user): void
-    {
-    }
+    public function updated(User $user): void {}
 
-    public function deleted(User $user): void
-    {
-    }
+    public function deleted(User $user): void {}
 
-    public function restored(User $user): void
-    {
-    }
+    public function restored(User $user): void {}
 
-    public function forceDeleted(User $user): void
-    {
-    }
+    public function forceDeleted(User $user): void {}
 }
