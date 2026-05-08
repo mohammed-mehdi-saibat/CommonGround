@@ -7,6 +7,7 @@ use App\Models\Guest;
 use Illuminate\Support\Facades\Auth;
 
 class GuestController extends Controller
+
 {
     public function show(Guest $guest)
     {
