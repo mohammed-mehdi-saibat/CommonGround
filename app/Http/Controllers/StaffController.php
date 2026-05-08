@@ -7,6 +7,7 @@ use App\Models\Staff;
 use Illuminate\Support\Facades\Auth;
 
 class StaffController extends Controller
+
 {
     public function show(Staff $staff)
     {
