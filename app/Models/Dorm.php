@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use function PHPSTORM_META\map;
 
 class Dorm extends Model
+
 {
     use HasFactory;
 
