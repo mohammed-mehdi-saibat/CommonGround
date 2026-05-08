@@ -1,108 +1,101 @@
-<x-admin-layout>
-    <div class="mb-8">
-        <div class="flex items-center justify-between">
-            <div>
-                <h2 class="font-headline-xl text-primary mb-2">Staff Directory</h2>
-                <p class="font-body-md text-on-surface-variant">Manage your hostel team, roles, and access levels from a central dashboard.</p>
-            </div>
-            <a href="{{ route('admin.staff.create') }}" class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-lg text-sm font-bold hover:opacity-90 transition-all">
-                <span class="material-symbols-outlined">person_add</span>
-                Add Staff
-            </a>
-        </div>
-    </div>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-sky-800 leading-tight">
+            {{ __('Staff Members') }}
+        </h2>
+    </x-slot>
 
-    <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-2xl p-6 shadow-sm border-t-2 border-primary">
-            <p class="text-label-sm font-label-sm text-gray-500 uppercase mb-1">Total Team</p>
-            <p class="text-headline-md font-headline-md text-primary">{{ $staff->total() ?? '24' }}</p>
-        </div>
-        <div class="bg-white rounded-2xl p-6 shadow-sm border-t-2 border-secondary">
-            <p class="text-label-sm font-label-sm text-gray-500 uppercase mb-1">On Duty</p>
-            <p class="text-headline-md font-headline-md text-secondary">{{ $onDutyCount ?? '8' }}</p>
-        </div>
-        <div class="bg-white rounded-2xl p-6 shadow-sm border-t-2 border-gray-400">
-            <p class="text-label-sm font-label-sm text-gray-500 uppercase mb-1">Departments</p>
-            <p class="text-headline-md font-headline-md text-on-surface">5 Groups</p>
-        </div>
-        <div class="bg-white rounded-2xl p-6 shadow-sm border-t-2 border-primary-container">
-            <p class="text-label-sm font-label-sm text-gray-500 uppercase mb-1">Growth</p>
-            <p class="text-headline-md font-headline-md text-primary-container">+12% MoM</p>
-        </div>
-    </div>
-
-    <!-- Data Table -->
-    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
-        <div class="overflow-x-auto">
-            <table class="w-full border-collapse">
-                <thead>
-                    <tr class="bg-gray-50/50 border-b border-gray-100">
-                        <th class="px-6 py-4 text-left text-label-caps font-label-caps text-gray-500">Staff Member</th>
-                        <th class="px-6 py-4 text-left text-label-caps font-label-caps text-gray-500">Role</th>
-                        <th class="px-6 py-4 text-left text-label-caps font-label-caps text-gray-500">Email</th>
-                        <th class="px-6 py-4 text-left text-label-caps font-label-caps text-gray-500">Status</th>
-                        <th class="px-6 py-4 text-right text-label-caps font-label-caps text-gray-500">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    @forelse($staff as $member)
-                        <tr class="hover:bg-gray-50/50 transition-colors group">
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
-                                        {{ substr($member->user->name, 0, 2) }}
-                                    </div>
-                                    <div>
-                                        <p class="font-body-md text-body-md font-semibold text-on-surface">{{ $member->user->name }}</p>
-                                        <p class="text-label-sm text-gray-500">ID: #CG{{ str_pad($member->id, 3, '0', STR_PAD_LEFT) }}</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="px-3 py-1 text-[11px] font-bold uppercase tracking-wider bg-blue-100 text-blue-800 rounded-full">
-                                    {{ $member->position ?? 'Staff' }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 font-body-sm text-body-sm text-on-surface-variant">{{ $member->user->email }}</td>
-                            <td class="px-6 py-4">
-                                <x-status-badge :status="$member->user->is_banned ? 'Banned' : 'Active'" />
-                            </td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <a href="{{ route('admin.staff.edit', $member->id) }}" class="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
-                                        <span class="material-symbols-outlined text-lg">edit</span>
-                                    </a>
-
-                                    @can('delete', $member)
-                                        <form method="POST" action="{{ route('admin.staff.destroy', $member->id) }}" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" onclick="return confirm('Are you sure?')">
-                                                <span class="material-symbols-outlined text-lg">delete</span>
-                                            </button>
-                                        </form>
-                                    @endcan
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-on-surface-variant">No staff members found.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination -->
-        @if($staff->hasPages())
-            <div class="px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between">
-                <p class="text-sm text-gray-500">Showing {{ $staff->firstItem() }}-{{ $staff->lastItem() }} of {{ $staff->total() }} staff members</p>
-                <div class="flex gap-2">
-                    {{ $staff->links() }}
+    <div class="py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Page Header -->
+            <div class="mb-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div>
+                    <h2 class="text-3xl font-black text-slate-800 italic">Staff Roster</h2>
+                    <p class="text-slate-500 font-medium mt-1">Manage your team members and their system access.</p>
                 </div>
+                <a href="{{ route('admin.staff.create') }}">
+                    <x-button variant="primary" class="!px-8 !py-4 shadow-lg shadow-sky-500/20">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                        Add Team Member
+                    </x-button>
+                </a>
             </div>
-        @endif
+
+            <!-- Staff List -->
+            <x-card class="!p-0 border border-slate-100 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50/50 border-b border-slate-100">
+                                <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Member</th>
+                                <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Contact</th>
+                                <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Position</th>
+                                <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Status</th>
+                                <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-[0.2em] text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
+                            @foreach ($staff ?? [] as $member)
+                                <tr class="hover:bg-sky-50/30 transition-colors group">
+                                    <td class="px-8 py-6">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center font-black text-xl">
+                                                {{ substr($member->user->name ?? $member->name, 0, 1) }}
+                                            </div>
+                                            <div>
+                                                <div class="font-black text-slate-800 text-lg">{{ $member->user->name ?? $member->name }}</div>
+                                                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">Joined: {{ $member->created_at->format('M Y') }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-8 py-6">
+                                        <div class="text-slate-600 font-bold">{{ $member->user->email ?? $member->email }}</div>
+                                        <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">{{ $member->phone_number ?? 'No phone' }}</div>
+                                    </td>
+                                    <td class="px-8 py-6">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-700 uppercase tracking-tighter">
+                                            {{ ucfirst($member->position) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-8 py-6">
+                                        @if($member->user && $member->user->is_banned)
+                                            <x-badge class="bg-red-100 text-red-600 border border-red-200">Suspended</x-badge>
+                                        @else
+                                            <x-badge class="bg-emerald-100 text-emerald-600 border border-emerald-200">Active</x-badge>
+                                        @endif
+                                    </td>
+                                    <td class="px-8 py-6 text-right">
+                                        <div class="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <a href="{{ route('admin.staff.show', $member) }}" class="p-2 bg-white border border-slate-200 text-slate-400 hover:text-sky-500 hover:border-sky-500 rounded-xl transition-all shadow-sm">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                            </a>
+                                            @if($member->user)
+                                                @if($member->user->is_banned)
+                                                    <form method="POST" action="{{ route('admin.users.unban', $member->user) }}" class="inline">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" class="p-2 bg-white border border-slate-200 text-emerald-400 hover:text-emerald-600 hover:border-emerald-600 rounded-xl transition-all shadow-sm" title="Unban">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <form method="POST" action="{{ route('admin.users.ban', $member->user) }}" class="inline">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" class="p-2 bg-white border border-slate-200 text-red-400 hover:text-red-600 hover:border-red-600 rounded-xl transition-all shadow-sm" title="Ban">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </x-card>
+        </div>
     </div>
-</x-admin-layout>
+</x-app-layout>
