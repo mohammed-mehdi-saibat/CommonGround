@@ -1,4 +1,5 @@
 <x-guest-layout>
+
     <div class="mb-10 text-center">
         <span class="inline-block px-4 py-1 bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-4">Welcome Back</span>
         <h2 class="text-4xl font-black text-slate-900 italic tracking-tighter">Enter the <span class="text-blue-600">Oasis</span></h2>
