@@ -11,6 +11,7 @@ use Stripe\Webhook;
 use Stripe\Exception\SignatureVerificationException;
 
 class PaymentController extends Controller
+
 {
     public function checkout(Booking $booking)
     {
