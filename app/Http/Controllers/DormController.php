@@ -8,6 +8,7 @@ use App\Models\Dorm;
 use Illuminate\Http\Request;
 
 class DormController extends Controller
+
 {
     /**
      * Display a listing of the resource.
