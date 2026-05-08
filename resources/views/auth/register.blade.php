@@ -1,4 +1,5 @@
 <x-guest-layout>
+
     <div class="mb-10 text-center">
         <span class="inline-block px-4 py-1 bg-orange-50 text-orange-600 text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-4">Start Your Journey</span>
         <h2 class="text-4xl font-black text-slate-900 italic tracking-tighter">Join the <span class="text-orange-600">Riad</span></h2>
