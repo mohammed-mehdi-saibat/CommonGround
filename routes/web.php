@@ -80,3 +80,4 @@ Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->grou
     Route::get('/profile/{staff}', [StaffController::class, 'edit'])->name('edit');
     Route::patch('/profile/{staff}', [StaffController::class, 'update'])->name('update');
 });
+
