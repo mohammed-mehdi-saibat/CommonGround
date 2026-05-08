@@ -32,7 +32,9 @@ class StaffController extends Controller
                 'role'     => 'staff',
             ]);
 
-            $user->staff->update([
+            // The UserObserver already creates the Staff record. 
+            // We just update it with the additional details.
+            $user->staff()->update([
                 'position'     => $request->position,
                 'phone_number' => $request->phone_number,
                 'hired_at'     => $request->hired_at ?? now(),

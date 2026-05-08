@@ -54,6 +54,27 @@ class PaymentController extends Controller
 
     public function success(Booking $booking)
     {
+        $payment = $booking->payment;
+
+        if ($payment && $payment->status !== 'paid') {
+            Stripe::setApiKey(config('services.stripe.secret'));
+            
+            try {
+                $session = Session::retrieve($payment->stripe_session_id);
+                
+                if ($session->payment_status === 'paid') {
+                    $payment->update([
+                        'status' => 'paid',
+                        'stripe_payment_intent' => $session->payment_intent,
+                    ]);
+
+                    $booking->update(['status' => 'confirmed']);
+                }
+            } catch (\Exception $e) {
+                // Silently fail and rely on webhook if retrieval fails
+            }
+        }
+
         return redirect()->route('guest.bookings.show', $booking)
             ->with('success', 'Payment successful! Your booking is confirmed.');
     }
