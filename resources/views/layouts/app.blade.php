@@ -15,6 +15,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased text-slate-900 bg-[#fdf8f1] overflow-hidden">
+
         
         <div class="flex h-screen w-full bg-[#fdf8f1] relative overflow-hidden">
             
